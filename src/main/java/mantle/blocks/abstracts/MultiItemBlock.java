@@ -2,12 +2,12 @@ package mantle.blocks.abstracts;
 
 import static mantle.lib.CoreRepo.logger;
 
-import com.google.gson.annotations.SerializedName;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * 
