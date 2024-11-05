@@ -59,7 +59,7 @@ public class CraftingItem extends Item {
     }
 
     public String getUnlocalizedName(ItemStack stack) {
-        int arr = MathHelper.clamp_int(stack.getItemDamage(), 0, unlocalizedNames.length);
+        int arr = MathHelper.clamp_int(stack.getItemDamage(), 0, unlocalizedNames.length - 1);
         return getUnlocalizedName() + "." + unlocalizedNames[arr];
     }
 
