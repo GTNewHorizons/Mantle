@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -72,6 +73,21 @@ public class GuiManual extends GuiScreen {
         this.buttonList
                 .add(this.buttonPreviousPage = new TurnPageButton(2, xPos - bookImageWidth + 24, 180, false, bData));
         updateButtonVisibility();
+    }
+
+    @Override
+    public void handleMouseInput() {
+        int scrollDelta = Mouse.getEventDWheel();
+        if (scrollDelta < 0 && currentPage < maxPages - 2) {
+            currentPage += 2;
+            updateButtonVisibility();
+            updateText();
+        } else if (scrollDelta > 0 && currentPage > 0) {
+            currentPage -= 2;
+            updateButtonVisibility();
+            updateText();
+        }
+        super.handleMouseInput();
     }
 
     private void updateButtonVisibility() {
