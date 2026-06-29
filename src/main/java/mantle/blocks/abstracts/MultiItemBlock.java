@@ -16,11 +16,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class MultiItemBlock extends ItemBlock {
 
-    private String blockType[];
+    private final String[] blockType;
     @SerializedName(value = "secondUnlocalizedName")
     private String unlocalizedName;
-    private String append;
-    private int specialIndex[] = { -1, -1 };
+    private final String append;
+    private final int[] specialIndex = { -1, -1 };
 
     public MultiItemBlock(Block b, String itemBlockUnlocalizedName, String[] blockTypes) {
         super(b);
@@ -46,20 +46,23 @@ public class MultiItemBlock extends ItemBlock {
         return meta;
     }
 
-    public String getUnlocalizedName(ItemStack itemstack) {
+    protected int getLocalizationMeta(ItemStack itemStack) {
+        return itemStack.getItemDamage();
+    }
 
+    @Override
+    public String getUnlocalizedName(ItemStack itemstack) {
         int pos = MathHelper.clamp_int(
-                itemstack.getItemDamage(),
+                getLocalizationMeta(itemstack),
                 0,
                 (specialIndex[0] > -1) ? specialIndex[0] : (blockType.length - 1));
         int sbIndex = (specialIndex[1] > -1) ? pos : (specialIndex[1] - pos);
         if (sbIndex < 0) sbIndex = -1 * sbIndex;
         try {
-            return (new StringBuilder()).append(unlocalizedName).append(".").append(blockType[sbIndex - 1])
-                    .append(append).toString();
+            return unlocalizedName + "." + blockType[sbIndex - 1] + append;
         } catch (ArrayIndexOutOfBoundsException ex) {
-            logger.warn("[MultiItemBlock] Caught array index error in getUnlocalizedName: " + ex.getMessage());
-            logger.warn("[MultiItemBlock] Returning unlocalized name: " + getUnlocalizedName());
+            logger.warn("[MultiItemBlock] Caught array index error in getUnlocalizedName: {}", ex.getMessage());
+            logger.warn("[MultiItemBlock] Returning unlocalized name: {}", getUnlocalizedName());
             return getUnlocalizedName();
         }
     }
